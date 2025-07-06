@@ -3,4 +3,4 @@ setup-local:
 	uv pip install -e .
 
 test-unit: setup-local
-	python3.12 -m unittest discover -s tests 
+	.venv/bin/python -m unittest discover -s tests 
