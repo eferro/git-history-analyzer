@@ -57,6 +57,8 @@ def main():
                    help='Specific dates to sample instead of entire history')
     p.add_argument('--debug', action='store_true',
                    help='Enable debug output of commits and raw scc JSON')
+    p.add_argument('--csv', action='store_true',
+                   help='Output results in CSV wide format (one column per language metrics)')
     args = p.parse_args()
 
     tmp = tempfile.mkdtemp(prefix='scc_monthly_')
@@ -153,9 +155,33 @@ def main():
                 per_lang[name] = {'lines': lines, 'complexity': complexity}
             results[ds] = per_lang
 
-        # output
-        json.dump(results, sys.stdout, indent=2)
-        sys.stdout.write('\n')
+        # output JSON or CSV
+        if args.csv:
+            # wide CSV: date, <lang>_lines, <lang>_complexity...
+            import csv
+            # collect all languages
+            langs = set()
+            for per in results.values():
+                langs.update(per.keys())
+            langs = sorted(langs)
+            # build header
+            header = ['date']
+            for lang in langs:
+                header.append(f"{lang}_lines")
+                header.append(f"{lang}_complexity")
+            writer = csv.writer(sys.stdout)
+            writer.writerow(header)
+            for ds in sorted(results.keys()):
+                row = [ds]
+                per = results.get(ds, {})
+                for lang in langs:
+                    vals = per.get(lang, {})
+                    row.append(vals.get('lines', ''))
+                    row.append(vals.get('complexity', ''))
+                writer.writerow(row)
+        else:
+            json.dump(results, sys.stdout, indent=2)
+            sys.stdout.write('\n')
     finally:
         # cleanup
         shutil.rmtree(tmp)
