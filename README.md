@@ -70,6 +70,11 @@ python3 monthly_scc_metrics.py [OPTIONS] <repo_url>
     --csv > metrics.csv
   ```
 
+- Sample full history (every month) on the default branch, output CSV:
+  ```sh
+  python3 monthly_scc_metrics.py https://github.com/user/project.git --csv > metrics_full_history.csv
+  ```
+
 ## Cleanup
 The script uses a temporary folder to clone and automatically removes it when done.
 
