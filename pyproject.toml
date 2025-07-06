@@ -1,0 +1,13 @@
+[project]
+name = "git-history-analyzer"
+version = "0.1.0"
+description = "CLI tool to analyze git history and code metrics"
+requires-python = ">=3.12"
+dependencies = [
+    "doublex",
+    "expects"
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build" 
