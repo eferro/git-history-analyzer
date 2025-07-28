@@ -17,12 +17,16 @@ and outputs the results as JSON or CSV for easy analysis and charting.
    sudo apt-get update && sudo apt-get install git
    sudo snap install scc --classic
    ```
-2. Clone or download this script into your working directory.
+2. Install the package from PyPI:
+   ```sh
+   pip install git-history-analyzer
+   ```
+   You can also clone this repository and install it locally with `pip install .`.
 
 ## Usage
 ```sh
-python3 monthly_scc_metrics.py [OPTIONS] <repo_url>
-``` 
+git-history-metrics [OPTIONS] <repo_url>
+```
 
 ### Positional Argument
 - `<repo_url>`: Git clone URL (SSH or HTTPS) of the repository to analyze.
@@ -30,6 +34,7 @@ python3 monthly_scc_metrics.py [OPTIONS] <repo_url>
 ### Options
 - `--branch BRANCH` : Branch or ref to sample (default: `HEAD`).
 - `--dates YYYY-MM-DD [YYYY-MM-DD ...]` : Specific dates to sample instead of the full history.
+- `--period {daily,weekly,monthly}` : Sampling period when `--dates` is not provided.
 - `--csv`          : Output a wide CSV (one row per date, one column per language metric).
 - `--debug`        : Print debug information (commit SHA, raw scc JSON) to stderr.
 - `-h, --help`     : Show help message and exit.
@@ -59,12 +64,12 @@ python3 monthly_scc_metrics.py [OPTIONS] <repo_url>
 
 - Sample every month for the default branch, output JSON:
   ```sh
-  python3 monthly_scc_metrics.py https://github.com/user/project.git > metrics.json
+  git-history-metrics https://github.com/user/project.git > metrics.json
   ```
 
 - Sample specific dates, output CSV:
   ```sh
-  python3 monthly_scc_metrics.py \
+  git-history-metrics \
     git@github.com:user/project.git \
     --dates 2023-01-01 2023-06-01 2023-12-01 \
     --csv > metrics.csv
@@ -72,7 +77,7 @@ python3 monthly_scc_metrics.py [OPTIONS] <repo_url>
 
 - Sample full history (every month) on the default branch, output CSV:
   ```sh
-  python3 monthly_scc_metrics.py https://github.com/user/project.git --csv > metrics_full_history.csv
+  git-history-metrics https://github.com/user/project.git --csv > metrics_full_history.csv
   ```
 
 ## Cleanup
