@@ -1,7 +1,8 @@
-# Monthly SCC Metrics Collector
+# Git History Metrics Collector
 
-This script clones a Git repository, samples its codebase at the first of each month (or specified dates),
-runs [scc](https://github.com/boyter/scc) to collect per-language metrics (lines of code and complexity),
+This utility clones a Git repository and samples its codebase at configurable intervals
+(daily, weekly, or monthly, or at specific dates).
+It runs [scc](https://github.com/boyter/scc) to collect per-language metrics (lines of code and complexity)
 and outputs the results as JSON or CSV for easy analysis and charting.
 
 ## Requirements
@@ -62,7 +63,7 @@ git-history-metrics [OPTIONS] <repo_url>
 
 ## Examples
 
-- Sample every month for the default branch, output JSON:
+- Sample monthly (the default period) for the default branch, output JSON:
   ```sh
   git-history-metrics https://github.com/user/project.git > metrics.json
   ```
@@ -75,7 +76,7 @@ git-history-metrics [OPTIONS] <repo_url>
     --csv > metrics.csv
   ```
 
-- Sample full history (every month) on the default branch, output CSV:
+- Sample full history monthly on the default branch, output CSV:
   ```sh
   git-history-metrics https://github.com/user/project.git --csv > metrics_full_history.csv
   ```
