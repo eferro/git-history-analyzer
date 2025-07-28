@@ -6,7 +6,7 @@ It runs [scc](https://github.com/boyter/scc) to collect per-language metrics (li
 and outputs the results as JSON or CSV for easy analysis and charting.
 
 ## Requirements
-- Python 3.6+ (tested on Python 3.12)
+- Python 3.8+ (tested on Python 3.12)
 - [git](https://git-scm.com/) installed and in your `PATH`
 - [scc](https://github.com/boyter/scc) installed (tested with scc v3.5.0)
 - Access to the target repository (SSH or HTTPS clone URL); authentication must be preconfigured.
