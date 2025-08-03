@@ -2,7 +2,7 @@ import datetime
 import json
 import subprocess
 import sys
-from typing import List, Dict
+from typing import List, Dict, Any
 
 
 def run(cmd, cwd=None, capture_output=False, check=True):
@@ -87,11 +87,17 @@ def collect_metrics(repo_dir: str, dates: List[datetime.date], branch_ref: str, 
         except json.JSONDecodeError:
             print(f"Error parsing scc JSON at {ds}", file=sys.stderr)
             continue
+        def first_non_none(d: Dict[str, Any], keys: List[str]):
+            for k in keys:
+                if k in d and d[k] is not None:
+                    return d[k]
+            return None
+
         per_lang = {}
         for ent in stats:
-            name = ent.get("Name") or ent.get("language") or ent.get("Language") or ent.get("name")
-            lines = ent.get("Code") or ent.get("code") or ent.get("Lines") or ent.get("lines")
-            complexity = ent.get("Complexity") or ent.get("complexity")
+            name = first_non_none(ent, ["Name", "language", "Language", "name"])
+            lines = first_non_none(ent, ["Code", "code", "Lines", "lines"])
+            complexity = first_non_none(ent, ["Complexity", "complexity"])
             if not name:
                 continue
             per_lang[name] = {"lines": lines, "complexity": complexity}
