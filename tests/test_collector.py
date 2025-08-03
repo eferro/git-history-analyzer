@@ -28,6 +28,25 @@ def test_collect_metrics_parses_json(tmp_path, monkeypatch):
     }
 
 
+def test_collect_metrics_handles_zero_values(tmp_path, monkeypatch):
+    def fake_run(cmd, cwd=None, capture_output=False, check=True):
+        if cmd[:2] == ["git", "rev-list"]:
+            return SimpleNamespace(stdout="deadbeef\n")
+        if cmd[:2] == ["git", "checkout"]:
+            return SimpleNamespace(stdout="")
+        if cmd[0] == "scc":
+            data = "[{\"Name\": \"Python\", \"Lines\": 0, \"Complexity\": 0}]"
+            return SimpleNamespace(stdout=data)
+        raise AssertionError(f"unexpected command {cmd}")
+
+    monkeypatch.setattr(collector, "run", fake_run)
+    dates = [datetime.date(2024, 1, 1)]
+    results = collector.collect_metrics(str(tmp_path), dates, "main", False)
+    assert results == {
+        "2024-01-01": {"Python": {"lines": 0, "complexity": 0}}
+    }
+
+
 def test_list_week_starts_aligns_to_monday():
     start = datetime.date(2024, 1, 3)  # Wednesday
     end = datetime.date(2024, 1, 20)
