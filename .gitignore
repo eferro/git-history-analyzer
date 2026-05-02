@@ -207,3 +207,9 @@ marimo/_lsp/
 __marimo__/
 
 .specstory/
+
+# IDE
+.vscode/
+
+# Tool outputs (project names — keep local)
+*-metrics-weekly.csv
